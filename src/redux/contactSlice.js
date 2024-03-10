@@ -4,10 +4,12 @@ import axios from 'axios';
 import contactService from 'service/contactService';
 
 const initialState = {
-  items: [],
-  status: 'idle',
-  error: null,
-  // filter: '',
+  contacts: {
+    items: [],
+    isLoading: false,
+    error: null,
+  },
+  filter: '',
 };
 
 // console.log('Reducer:', contactsReducer);
@@ -17,6 +19,7 @@ export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
   console.log('Server result:', result);
   return result;
 });
+
 // debugger;
 export const addContact = createAsyncThunk(
   'contacts/addContact',
