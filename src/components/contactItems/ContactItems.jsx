@@ -1,21 +1,27 @@
+// ContactItems.jsx
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import styles from './ContactItems.module.css';
-import { Button } from 'react-bootstrap';
-// import { deleteContact } from 'redux/contactSlice';
+import { Button, Card } from 'react-bootstrap';
 import { deleteContact } from '../../redux/contactSlice';
 
-export default function ContactItems({ contact, id, phoneNumber }) {
+export default function ContactItems({ name, phoneNumber, id }) {
   const dispatch = useDispatch();
-  function handleDelete(id) {
-    dispatch(deleteContact(id));
-  }
+
+  const handleDelete = async id => {
+    try {
+      await dispatch(deleteContact(id));
+    } catch (error) {
+      console.error('Error deleting contact:', error.message);
+    }
+  };
 
   return (
-    <li className={styles.list}>
+    <Card className={styles.list}>
       <p>
-        {contact}: {phoneNumber}
+        {name} : {phoneNumber}
       </p>
       <Button onClick={() => handleDelete(id)}>Delete</Button>
-    </li>
+    </Card>
   );
 }

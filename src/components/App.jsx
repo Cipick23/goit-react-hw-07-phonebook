@@ -1,10 +1,9 @@
 import { Button, Card, CardBody, CardGroup } from 'react-bootstrap';
 import FormSubmit from './formSubmit/FormSubmit';
 import Filter from './filter/Filter';
-import ContactsList from './contactList/ContactList';
 import { ToastContainer } from 'react-toastify';
-
 import React, { useState } from 'react'; // Asigură-te că importezi `useState` de la 'react'
+import ContactList from './contactList/ContactList';
 
 export const App = () => {
   const [isOpen, setIsOpen] = useState(false); // Initializează state-ul isOpen
@@ -38,14 +37,14 @@ export const App = () => {
                 <Card>
                   <h2>Contacts</h2>
                   <Filter />
-                  <ContactsList />
+                  <ContactList />
                 </Card>
               )}
             </CardBody>
           )}
         </div>
+        <ToastContainer />
       </CardGroup>
-      <ToastContainer />
       {/* // </ThemeProvider> */}
     </div>
   );

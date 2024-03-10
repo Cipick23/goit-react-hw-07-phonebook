@@ -1,50 +1,28 @@
+// ContactList.jsx
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectContacts, selectFiltersContacts } from '../../redux/selectors';
+import { selectVisibleContacts } from '../../redux/selectors';
 import styles from './ContactList.module.css';
-import ContactItems from 'components/contactItems/ContactItems';
+import ContactItems from '../../components/contactItems/ContactItems';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-export default function ContactsList() {
-  const contacts = useSelector(selectContacts);
-  const filteredContacts = useSelector(selectFiltersContacts);
-
-  function filteredByContact() {
-    const filter = filteredContacts.toLowerCase();
-    const filtered = contacts.filter(item =>
-      item.contact.toLowerCase().includes(filter)
-    );
-    return filtered;
-  }
-
-  const visibleContacts = filteredByContact();
+const ContactList = () => {
+  // Folosind selectorul pentru a obține lista filtrată de contacte
+  const visibleContacts = useSelector(selectVisibleContacts);
 
   return (
-    <ul className={styles.menu}>
-      {visibleContacts.length === 0 && filteredContacts.length > 0 ? (
-        <li className={`${styles.item} contact-list`}>
-          No matching contacts found
-        </li>
-      ) : visibleContacts.length > 0 ? (
-        visibleContacts.map(({ contact, phoneNumber, id }) => (
-          <ContactItems
-            key={id}
-            id={id}
-            contact={contact}
-            phoneNumber={phoneNumber}
-          />
-        ))
-      ) : contacts.length !== 0 ? (
-        visibleContacts.map(({ contact, phoneNumber, id }) => (
-          <ContactItems
-            key={id}
-            id={id}
-            contact={contact}
-            phoneNumber={phoneNumber}
-          />
-        ))
-      ) : (
-        ''
-      )}
-    </ul>
+    <div className={styles.menu}>
+      <h2>Lista de Contacte</h2>
+      <ListGroup>
+        {visibleContacts.map(({ id, name, phoneNumber }) => (
+          <ListGroupItem key={id}>
+            {/* Transmiterea proprietăților contactului la ContactItems */}
+            <ContactItems id={id} name={name} phoneNumber={phoneNumber} />
+          </ListGroupItem>
+        ))}
+      </ListGroup>
+    </div>
   );
-}
+};
+
+export default ContactList;

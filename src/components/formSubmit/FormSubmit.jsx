@@ -1,96 +1,108 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactSlice';
-import { selectContacts } from '../../redux/selectors';
-import { nanoid } from '@reduxjs/toolkit';
+import { addContact, fetchContacts } from '../../redux/contactSlice';
 import styles from './FormSubmit.module.css';
 import * as yup from 'yup';
 import { Button, FormLabel } from 'react-bootstrap';
+import { selectContactStatus } from '../../redux/selectors';
 
-export default function FormSubmit() {
+const FormSubmit = () => {
+  const contactStatus = useSelector(selectContactStatus);
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
 
-  const [contact, setContact] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  function handleSubmit(values) {
-    const newValue = { ...values, id: nanoid() };
-
-    if (!newValue.contact || !newValue.phoneNumber) {
-      return;
+  useEffect(() => {
+    if (contactStatus === 'idle') {
+      dispatch(fetchContacts());
     }
+  }, [contactStatus, dispatch]);
 
-    const contactExist = contacts.some(
-      item => item.contact === newValue.contact
-    );
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .min(1, 'Too Short Name!')
+      .max(50, 'Too Long Name!')
+      .required('Please write a name'),
+    phoneNumber: yup
+      .string()
+      .min(9, 'Invalid Phone Number')
+      .required('Please fill up the phone number!'),
+  });
 
-    if (contactExist) {
-      toast(`${newValue.contact} is already in contacts.`, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: 'light',
+  const handleSubmit = async (items, actions) => {
+    try {
+      // debugger;
+
+      console.log('Submitting form with values:', items);
+
+      const response = await dispatch(fetchContacts(items));
+
+      console.log('API response:', response);
+      const newContact = response.payload;
+
+      if (newContact) {
+        console.log('Adding contact to state.items:', newContact);
+        const message = newContact
+          ? `${newContact} added successfully!`
+          : 'Contact added successfully!';
+
+        toast(message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: 'light',
+        });
+
+        console.log('Contact added successfully!');
+      } else {
+        console.error(
+          'Error adding contact: Contact information not available.'
+        );
+        // debugger;
+        return response.payload;
+      }
+
+      console.log('Values before resetForm:', actions.values);
+
+      actions.resetForm({
+        values: {
+          name: '',
+          phoneNumber: '',
+        },
       });
-    } else {
-      dispatch(addContact(newValue));
+    } catch (error) {
+      console.error('Error adding contact', error);
+    } finally {
+      addContact(items);
     }
-
-    setContact('');
-    setPhoneNumber('');
-  }
+  };
 
   return (
     <Formik
       initialValues={{
-        contact: contact,
-        phoneNumber: phoneNumber,
+        name: '',
+        phoneNumber: '',
       }}
-      validationSchema={yup.object({
-        contact: yup
-          .string()
-          .min(1, 'Too Short Name!')
-          .max(50, 'Too Long Name!')
-          .required('Please write a name'),
-        phoneNumber: yup
-          .string()
-          .min(9, 'Invalid Phone Number')
-          .required('Please fill up the phone number!'),
-      })}
-      onSubmit={(values, actions) => {
-        handleSubmit(values);
-        actions.resetForm({
-          values: {
-            contact: contact,
-            phoneNumber: phoneNumber,
-          },
-        });
-      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
     >
       <Form className={styles.form}>
-        <FormLabel className={styles.label} htmlFor="contact">
+        <FormLabel className={styles.label} htmlFor="name">
           Name
         </FormLabel>
         <div className={styles.inputWrapper}>
           <Field
             className={styles.field}
             type="text"
-            name="contact"
+            name="name"
             placeholder="Name"
           />
         </div>
-
-        <ErrorMessage
-          className={styles.error}
-          component="span"
-          name="contact"
-        />
 
         <FormLabel className={styles.label} htmlFor="phoneNumber">
           Number
@@ -117,4 +129,6 @@ export default function FormSubmit() {
       </Form>
     </Formik>
   );
-}
+};
+
+export default FormSubmit;

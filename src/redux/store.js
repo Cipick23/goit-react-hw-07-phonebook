@@ -1,16 +1,18 @@
+// rootReducer.js
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { persistStore } from 'redux-persist';
-import persistReducer from 'redux-persist/es/persistReducer';
+import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import contactSlice from './contactSlice';
+import contactSlice from '../redux/contactSlice';
+// import { devToolsEnhancer } from '@redux-devtools/extension';
 
 const persistConfig = {
   key: 'root',
   storage,
 };
+// debugger;
 
 const rootReducer = combineReducers({
-  contacts: contactSlice.reducer,
+  contacts: contactSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -21,6 +23,10 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }),
+  // devTools: false,
 });
+
+// Vom extinde store-ul pentru a adăuga devTools
+// const enhancer = devToolsEnhancer();
 
 export const persistor = persistStore(store);
