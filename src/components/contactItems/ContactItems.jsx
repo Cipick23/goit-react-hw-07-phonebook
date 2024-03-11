@@ -11,6 +11,7 @@ export default function ContactItems({ name, phoneNumber, id }) {
   const handleDelete = async id => {
     try {
       await dispatch(deleteContact(id));
+      console.log('to delete item', id);
     } catch (error) {
       console.error('Error deleting contact:', error.message);
     }

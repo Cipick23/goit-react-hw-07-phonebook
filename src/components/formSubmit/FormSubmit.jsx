@@ -7,6 +7,7 @@ import styles from './FormSubmit.module.css';
 import * as yup from 'yup';
 import { Button, FormLabel } from 'react-bootstrap';
 import { selectContactStatus } from '../../redux/selectors';
+import { setFilter as setContactsFilter } from '../../redux/contactsFilterSlice';
 
 const FormSubmit = () => {
   const contactStatus = useSelector(selectContactStatus);
@@ -36,15 +37,16 @@ const FormSubmit = () => {
 
       console.log('Submitting form with values:', items);
 
-      const response = await dispatch(fetchContacts(items));
+      const response = await dispatch(addContact(items));
 
       console.log('API response:', response);
+
       const newContact = response.payload;
 
       if (newContact) {
         console.log('Adding contact to state.items:', newContact);
         const message = newContact
-          ? `${newContact} added successfully!`
+          ? `${newContact.name} added successfully!`
           : 'Contact added successfully!';
 
         toast(message, {
@@ -67,7 +69,7 @@ const FormSubmit = () => {
         return response.payload;
       }
 
-      console.log('Values before resetForm:', actions.values);
+      console.log('Values before resetForm:', items);
 
       actions.resetForm({
         values: {
@@ -78,7 +80,8 @@ const FormSubmit = () => {
     } catch (error) {
       console.error('Error adding contact', error);
     } finally {
-      addContact(items);
+      dispatch(addContact(items));
+      dispatch(setContactsFilter(''));
     }
   };
 

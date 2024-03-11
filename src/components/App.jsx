@@ -9,7 +9,7 @@ export const App = () => {
   const [isOpen, setIsOpen] = useState(false); // Initializează state-ul isOpen
 
   // Presupunând că contacts este definit undeva, altfel asigură-te că este declarat.
-  const contacts = []; // Aici poți să-ți adaugi datele sau să le initializezi cum dorești.
+  // const contacts = []; // Aici poți să-ți adaugi datele sau să le initializezi cum dorești.
 
   return (
     <div
@@ -24,26 +24,23 @@ export const App = () => {
     >
       {/* // <ThemeProvider theme={isDarkTheme ? theme.dark : theme.light}> */}
       <CardGroup>
-        {/* <ThemeButton toggleTheme={toggleTheme} /> */}
         <div>
           <Button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? 'Close' : 'Open'}
           </Button>
           {isOpen && (
-            <CardBody>
+            <Card>
               <h1>Phonebook</h1>
+              <CardBody>
+                <Card.Title>Contacts</Card.Title>
+                <Filter />
+                <ContactList />
+                <ToastContainer draggable={false} />
+              </CardBody>
               <FormSubmit />
-              {contacts.length > 0 && (
-                <Card>
-                  <h2>Contacts</h2>
-                  <Filter />
-                  <ContactList />
-                </Card>
-              )}
-            </CardBody>
+            </Card>
           )}
         </div>
-        <ToastContainer />
       </CardGroup>
       {/* // </ThemeProvider> */}
     </div>

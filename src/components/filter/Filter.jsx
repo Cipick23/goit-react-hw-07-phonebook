@@ -1,6 +1,6 @@
 // Filter.js
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilter } from '../../redux/contactSlice';
+import { fetchContacts, setFilter } from '../../redux/contactSlice';
 import { selectFiltersContacts } from '../../redux/selectors';
 import styles from './Filter.module.css';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ export default function Filter() {
 
   useEffect(() => {
     // Dacă dorești, poți adăuga aici un apel către backend pentru a obține contactele
-    // dispatch(fetchContacts());
+    dispatch(fetchContacts());
   }, [dispatch]);
 
   function changeFilter(e) {
