@@ -8,7 +8,9 @@ import { deleteContact } from '../../redux/contactSlice';
 export default function ContactItems({ name, phoneNumber, id }) {
   const dispatch = useDispatch();
 
-  const handleDelete = async id => {
+  const handleDelete = async () => {
+    // debugger;
+    console.log('comanda de stergere este initializata cu succes', id);
     try {
       await dispatch(deleteContact(id));
       console.log('to delete item', id);
@@ -22,7 +24,7 @@ export default function ContactItems({ name, phoneNumber, id }) {
       <p>
         {name} : {phoneNumber}
       </p>
-      <Button onClick={() => handleDelete(id)}>Delete</Button>
+      <Button onClick={handleDelete}>Delete</Button>
     </Card>
   );
 }

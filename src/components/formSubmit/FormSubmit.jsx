@@ -33,8 +33,6 @@ const FormSubmit = () => {
 
   const handleSubmit = async (items, actions) => {
     try {
-      // debugger;
-
       console.log('Submitting form with values:', items);
 
       const response = await dispatch(addContact(items));
