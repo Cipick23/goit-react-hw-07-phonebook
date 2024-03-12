@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styles from './ContactItems.module.css';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, CardTitle } from 'react-bootstrap';
 import { deleteContact } from '../../redux/contactSlice';
 
 export default function ContactItems({ name, phoneNumber, id }) {
@@ -21,9 +21,9 @@ export default function ContactItems({ name, phoneNumber, id }) {
 
   return (
     <Card className={styles.list}>
-      <p>
+      <CardTitle>
         {name} : {phoneNumber}
-      </p>
+      </CardTitle>
       <Button onClick={handleDelete}>Delete</Button>
     </Card>
   );
