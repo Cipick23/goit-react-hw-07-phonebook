@@ -78,7 +78,7 @@ const FormSubmit = () => {
     } catch (error) {
       console.error('Error adding contact', error);
     } finally {
-      dispatch(addContact(items));
+      // dispatch(addContact(items));
       dispatch(setContactsFilter(''));
     }
   };

@@ -4,27 +4,27 @@ import { useSelector } from 'react-redux';
 import { selectVisibleContacts } from '../../redux/selectors';
 import styles from './ContactList.module.css';
 import ContactItems from '../../components/contactItems/ContactItems';
-import { Card, CardBody } from 'react-bootstrap';
+import { Card, CardBody, CardTitle } from 'react-bootstrap';
 
 const ContactList = () => {
   // Folosind selectorul pentru a obține lista filtrată de contacte
   const visibleContacts = useSelector(selectVisibleContacts);
 
   return (
-    <div className={styles.menu}>
-      <h2>Lista de Contacte</h2>
-      <Card>
+    <Card className={styles.menu}>
+      <CardTitle>Lista de Contacte</CardTitle>
+      <CardBody>
         {visibleContacts.map(contact => (
-          <CardBody key={contact.id}>
+          <div key={contact.id}>
             <ContactItems
               id={contact.id}
               name={contact.name}
               phoneNumber={contact.phoneNumber}
             />
-          </CardBody>
+          </div>
         ))}
-      </Card>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 

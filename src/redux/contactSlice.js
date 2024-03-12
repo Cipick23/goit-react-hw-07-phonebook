@@ -37,9 +37,9 @@ export const deleteContact = createAsyncThunk(
   }
 );
 
-export const updateCity = createAsyncThunk('/contacts', async initialPost => {
-  return contactService.update(initialPost);
-});
+// export const updateCity = createAsyncThunk('/contacts', async initialPost => {
+//   return contactService.update(initialPost);
+// });
 
 export const setFilter = filter => ({
   type: 'contacts/setFilter',
