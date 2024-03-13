@@ -83,5 +83,5 @@ const contactSlice = createSlice({
 });
 
 // export const { deleteContact } = contactSlice.actions;
-// export default contactsReducer = contactSlice.reducer;
-export default contactSlice.reducer;
+// export default contactSlice.reducer;
+export const contactsReducer = contactSlice.reducer;

@@ -1,3 +1,4 @@
+// FormSubmit
 import React, { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
@@ -59,6 +60,15 @@ const FormSubmit = () => {
         });
 
         console.log('Contact added successfully!');
+
+        actions.resetForm({
+          values: {
+            name: '',
+            phoneNumber: '',
+          },
+        });
+
+        dispatch(setContactsFilter(''));
       } else {
         console.error(
           'Error adding contact: Contact information not available.'
@@ -79,7 +89,6 @@ const FormSubmit = () => {
       console.error('Error adding contact', error);
     } finally {
       // dispatch(addContact(items));
-      dispatch(setContactsFilter(''));
     }
   };
 
@@ -93,9 +102,7 @@ const FormSubmit = () => {
       onSubmit={handleSubmit}
     >
       <Form className={styles.form}>
-        <FormLabel className={styles.label} htmlFor="name">
-          Name
-        </FormLabel>
+        <FormLabel className={styles.label}>Name</FormLabel>
         <div className={styles.inputWrapper}>
           <Field
             className={styles.field}
@@ -105,9 +112,7 @@ const FormSubmit = () => {
           />
         </div>
 
-        <FormLabel className={styles.label} htmlFor="phoneNumber">
-          Number
-        </FormLabel>
+        <FormLabel className={styles.label}>Number</FormLabel>
 
         <div className={styles.inputWrapper}>
           <Field

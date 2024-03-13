@@ -24,7 +24,9 @@ export default function ContactItems({ name, phoneNumber, id }) {
       <CardTitle>
         {name} : {phoneNumber}
       </CardTitle>
-      <Button onClick={handleDelete}>Delete</Button>
+      <Button onClick={handleDelete} className={styles.button}>
+        Delete
+      </Button>
     </Card>
   );
 }

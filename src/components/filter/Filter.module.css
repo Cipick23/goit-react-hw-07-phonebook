@@ -40,3 +40,8 @@
   font-weight: 400;
   line-height: 1.28;
 }
+
+.list {
+  display: flex;
+  flex-direction: column;
+}

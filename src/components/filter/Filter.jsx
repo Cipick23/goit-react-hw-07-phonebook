@@ -1,39 +1,30 @@
-// Filter.js
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts, setFilter } from '../../redux/contactSlice';
-import { selectFiltersContacts } from '../../redux/selectors';
-import styles from './Filter.module.css';
-import { useEffect } from 'react';
+import { selectContacts, selectFiltersContacts } from '../../redux/selectors';
+import { setFilter } from '../../redux/contactsFilterSlice';
+import PropTypes from 'prop-types';
 
-export default function Filter() {
+function Filter() {
   const dispatch = useDispatch();
-  const filteredContacts = useSelector(selectFiltersContacts);
+  const filter = useSelector(selectFiltersContacts);
 
-  useEffect(() => {
-    // Dacă dorești, poți adăuga aici un apel către backend pentru a obține contactele
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
-  function changeFilter(e) {
-    const searchContact = e.toLowerCase();
-    dispatch(setFilter(searchContact));
-  }
+  const handleFilterChange = event => {
+    dispatch(setFilter(event.target.value.trim()));
+  };
 
   return (
-    <div className={styles.filterDiv}>
-      <label className={styles.filterLabel} htmlFor="search">
-        Find contacts by name:
-      </label>
-      <input
-        className={styles.filterInput}
-        type="text"
-        name="search"
-        value={filteredContacts}
-        placeholder="Search contacts"
-        onChange={e => {
-          changeFilter(e.target.value);
-        }}
-      />
-    </div>
+    <input
+      type="text"
+      name="filter"
+      placeholder="Search by name"
+      value={filter}
+      onChange={handleFilterChange}
+      disabled={useSelector(selectContacts).length === 0}
+    />
   );
 }
+
+export default Filter;
+
+Filter.propTypes = {
+  onChange: PropTypes.func, // Specificăm că onChange ar trebui să fie o funcție
+};
