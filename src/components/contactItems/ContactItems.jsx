@@ -1,32 +1,35 @@
-// ContactItems.jsx
 import React from 'react';
+import propTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import styles from './ContactItems.module.css';
-import { Button, Card, CardTitle } from 'react-bootstrap';
-import { deleteContact } from '../../redux/contactSlice';
+import css from './ContactItems.module.css';
+import { deleteContact } from '../../redux/contactService';
 
-export default function ContactItems({ name, phoneNumber, id }) {
+const ContactItems = props => {
   const dispatch = useDispatch();
 
-  const handleDelete = async () => {
-    // debugger;
-    console.log('comanda de stergere este initializata cu succes', id);
-    try {
-      await dispatch(deleteContact(id));
-      console.log('to delete item', id);
-    } catch (error) {
-      console.error('Error deleting contact:', error.message);
-    }
+  const ContactDeleteHandler = () => {
+    dispatch(deleteContact(props.id));
   };
 
   return (
-    <Card className={styles.list}>
-      <CardTitle>
-        {name} : {phoneNumber}
-      </CardTitle>
-      <Button onClick={handleDelete} className={styles.button}>
+    <li className={css.list}>
+      <p>{props.name}</p>
+      <p>{props.phone}</p>
+      <button
+        className={css.contactDelete}
+        type="button"
+        onClick={ContactDeleteHandler}
+      >
         Delete
-      </Button>
-    </Card>
+      </button>
+    </li>
   );
-}
+};
+
+ContactItems.propTypes = {
+  name: propTypes.string.isRequired,
+  phone: propTypes.string,
+  id: propTypes.string,
+};
+
+export default ContactItems;

@@ -1,33 +1,33 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectFiltersContacts } from '../../redux/selectors';
-import { setFilter } from '../../redux/contactsFilterSlice';
-import PropTypes from 'prop-types';
-// import { selectContacts } from '../../redux/selectors';
+import React from 'react';
+import css from './Filter.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { setContactsFilter } from '../../redux/contactsFilterSlice';
+import { selectContactsFilter } from '../../redux/selectors';
 
-function Filter() {
+const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(selectFiltersContacts);
-  const contacts = useSelector(selectContacts);
-  const isContactsEmpty = contacts === undefined ? true : contacts.length === 0;
+  const filter = useSelector(selectContactsFilter);
 
-  const handleFilterChange = event => {
-    dispatch(setFilter(event.target.value.trim()));
+  const filterChangeHandler = event => {
+    dispatch(setContactsFilter(event.target.value));
   };
 
   return (
-    <input
-      type="text"
-      name="filter"
-      placeholder="Search by name"
-      value={filter}
-      onChange={handleFilterChange}
-      disabled={isContactsEmpty}
-    />
+    <div className={css.filter}>
+      <h3>Find contacts by name:</h3>
+      <input
+        className={css.filter__field}
+        id="filter"
+        value={filter}
+        onChange={filterChangeHandler}
+        type="text"
+        name="filter"
+        pattern="^[a-zA-ZĄąĆćĘęŁłŃńÓóŚśŹźŻż]+(([' \-][a-zA-ZĄąĆćĘęŁłŃńÓóŚśŹźŻż])?[a-zA-ZĄąĆćĘęŁłŃńÓóŚśŹźŻż]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+      />
+    </div>
   );
-}
+};
 
 export default Filter;
-
-Filter.propTypes = {
-  onChange: PropTypes.func, // Specificăm că onChange ar trebui să fie o funcție
-};

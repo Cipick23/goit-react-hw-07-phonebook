@@ -1,139 +1,70 @@
-// FormSubmit
-import React, { useEffect } from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact, fetchContacts } from '../../redux/contactSlice';
-import styles from './FormSubmit.module.css';
-import * as yup from 'yup';
-import { Button, FormLabel } from 'react-bootstrap';
-import { selectContactStatus } from '../../redux/selectors';
-import { setFilter as setContactsFilter } from '../../redux/contactsFilterSlice';
+//Commented code in this file is the previous version of checking if the contact that we are adding is already in contacts
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactService';
+import css from './FormSubmit.module.css';
+// import { selectContacts } from './../../redux/selectors';
+// import Notiflix from 'notiflix';
 
 const FormSubmit = () => {
-  const contactStatus = useSelector(selectContactStatus);
   const dispatch = useDispatch();
+  // const contacts = useSelector(selectContacts);
 
-  useEffect(() => {
-    if (contactStatus === 'idle') {
-      dispatch(fetchContacts());
-    }
-  }, [contactStatus, dispatch]);
+  const handleSubmit = e => {
+    e.preventDefault();
+    const form = e.target;
+    // const names = contacts.map(contact => contact.name.toLowerCase());
+    // const newContactName = form.elements.name.value.trim().toLowerCase();
 
-  const validationSchema = yup.object({
-    name: yup
-      .string()
-      .min(1, 'Too Short Name!')
-      .max(50, 'Too Long Name!')
-      .required('Please write a name'),
-    phoneNumber: yup
-      .string()
-      .min(9, 'Invalid Phone Number')
-      .required('Please fill up the phone number!'),
-  });
+    // if (names.find(name => name === newContactName)) {
+    //   form.reset();
+    //   return Notiflix.Notify.failure(
+    //     `Contact with name '${newContactName}' is already in contacts.`
+    //   );
+    // }
 
-  const handleSubmit = async (items, actions) => {
-    try {
-      console.log('Submitting form with values:', items);
-
-      const response = await dispatch(addContact(items));
-
-      console.log('API response:', response);
-
-      const newContact = response.payload;
-
-      if (newContact) {
-        console.log('Adding contact to state.items:', newContact);
-        const message = newContact
-          ? `${newContact.name} added successfully!`
-          : 'Contact added successfully!';
-
-        toast(message, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: 'light',
-        });
-
-        console.log('Contact added successfully!');
-
-        actions.resetForm({
-          values: {
-            name: '',
-            phoneNumber: '',
-          },
-        });
-
-        dispatch(setContactsFilter(''));
-      } else {
-        console.error(
-          'Error adding contact: Contact information not available.'
-        );
-        // debugger;
-        return response.payload;
-      }
-
-      console.log('Values before resetForm:', items);
-
-      actions.resetForm({
-        values: {
-          name: '',
-          phoneNumber: '',
-        },
-      });
-    } catch (error) {
-      console.error('Error adding contact', error);
-    } finally {
-      // dispatch(addContact(items));
-    }
+    dispatch(
+      addContact({
+        name: form.elements.name.value,
+        phone: form.elements.number.value,
+      })
+    );
+    form.reset();
+    // Notiflix.Notify.success(
+    //   `Contact with name '${newContactName}' has been added succesfully to contacts list.`
+    // );
   };
 
   return (
-    <Formik
-      initialValues={{
-        name: '',
-        phoneNumber: '',
-      }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form className={styles.form}>
-        <FormLabel className={styles.label}>Name</FormLabel>
-        <div className={styles.inputWrapper}>
-          <Field
-            className={styles.field}
-            type="text"
-            name="name"
-            placeholder="Name"
-          />
-        </div>
-
-        <FormLabel className={styles.label}>Number</FormLabel>
-
-        <div className={styles.inputWrapper}>
-          <Field
-            className={styles.field}
-            type="number"
-            name="phoneNumber"
-            placeholder="123 45 6789"
-          />
-        </div>
-
-        <ErrorMessage
-          className={styles.error}
-          component="span"
-          name="phoneNumber"
-        />
-
-        <Button className={styles.contactBtn} type="submit">
-          Add contact
-        </Button>
-      </Form>
-    </Formik>
+    <form className={css.contactForm} onSubmit={handleSubmit}>
+      <label className={css.contactForm__label} htmlFor="name">
+        Name
+      </label>
+      <input
+        className={css.contactForm__field}
+        id="name"
+        type="text"
+        name="name"
+        pattern="^[a-zA-ZĄąĆćĘęŁłŃńÓóŚśŹźŻż]+(([' \-][a-zA-ZĄąĆćĘęŁłŃńÓóŚśŹźŻż])?[a-zA-ZĄąĆćĘęŁłŃńÓóŚśŹźŻż]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+      />
+      <label className={css.contactForm__label} htmlFor="number">
+        Number
+      </label>
+      <input
+        className={css.contactForm__field}
+        id="number"
+        type="tel"
+        name="number"
+        pattern="\+?\d{1,4}?[\-.\s]?\(?\d{1,3}?\)?[\-.\s]?\d{1,4}[\-.\s]?\d{1,4}[\-.\s]?\d{1,9}"
+        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+        required
+      />
+      <button className={css.contactForm__button} type="submit">
+        Add Contact
+      </button>
+    </form>
   );
 };
 

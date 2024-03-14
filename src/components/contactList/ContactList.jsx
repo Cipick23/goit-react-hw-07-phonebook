@@ -1,31 +1,40 @@
-// ContactList.jsx
 import React from 'react';
+import propTypes from 'prop-types';
+import css from './ContactList.module.css';
 import { useSelector } from 'react-redux';
-import { selectVisibleContacts } from '../../redux/selectors';
-import styles from './ContactList.module.css';
-import ContactItems from '../../components/contactItems/ContactItems';
-import { Card, CardBody, CardTitle } from 'react-bootstrap';
+import { selectFilteredContacts } from '../../redux/selectors';
+import ContactItems from 'components/contactItems/ContactItems';
 
 const ContactList = () => {
-  // Folosind selectorul pentru a obține lista filtrată de contacte
-  const visibleContacts = useSelector(selectVisibleContacts);
+  const filteredContacts = useSelector(selectFilteredContacts);
 
   return (
-    <Card className={styles.menu}>
-      <CardTitle>Lista de Contacte</CardTitle>
-      <CardBody>
-        {visibleContacts.map(contact => (
-          <div key={contact.id}>
-            <ContactItems
-              id={contact.id}
-              name={contact.name}
-              phoneNumber={contact.phoneNumber}
-            />
-          </div>
-        ))}
-      </CardBody>
-    </Card>
+    <ul className={css.menu}>
+      {filteredContacts.length ? (
+        filteredContacts.map(contact => (
+          <ContactItems
+            key={contact.id}
+            id={contact.id}
+            name={contact.name}
+            phone={contact.phone}
+          />
+        ))
+      ) : (
+        <p>Your phonebook is empty. Add your contacts</p>
+      )}
+    </ul>
   );
+};
+
+ContactList.propTypes = {
+  list: propTypes.arrayOf(
+    propTypes.shape({
+      key: propTypes.string,
+      name: propTypes.string.isRequired,
+      phone: propTypes.string.isRequired,
+      deleteContact: propTypes.func,
+    })
+  ),
 };
 
 export default ContactList;
