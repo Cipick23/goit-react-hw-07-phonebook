@@ -17,36 +17,21 @@ export const fetchContacts = createAsyncThunk(
   }
 );
 
-//Previous version of addContact assync function without validation of existing contact in contacts
-// export const addContact = createAsyncThunk(
-//   'contacts/addContact',
-//   async ({ name, phone }, thunkAPI) => {
-//     try {
-//       const response = await axios.post('/contacts', { name, phone });
-//       return response.data;
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue(e.message);
-//     }
-//   }
-// );
-
 export const addContact = createAsyncThunk(
   'contacts/add',
   async (contact, thunkAPI) => {
     try {
-      //pobranie obecnych kontaktów poprzez get:
       const {
         contacts: { contacts },
       } = thunkAPI.getState();
-      //sprawdzenie czy jest kontakt na liście
+
       if (contacts.find(item => item.name === contact.name)) {
-        //jakiś alert dla użytkownika i reject
         Notiflix.Notify.failure(
           `Contact with name '${contact.name}' is already in contacts.`
         );
         return thunkAPI.rejectWithValue('Contact already exist');
       }
-      //jeśli przechodzi bo nie ma takiego kontaktu to dodajemy postem nowy kontakt
+
       const response = await axios.post('/contacts', contact);
       Notiflix.Notify.success(
         `Contact with name '${contact.name}' has been added succesfully to contacts list.`

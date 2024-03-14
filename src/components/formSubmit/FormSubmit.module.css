@@ -1,4 +1,10 @@
 /* ContactForm.module.css */
+.formFlex {
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
+}
+
 .form {
   display: flex;
   flex-direction: column;

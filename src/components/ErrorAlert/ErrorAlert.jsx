@@ -11,7 +11,7 @@ const ErrorAlert = ({ errors }) => {
   const [isClosed, setIsClosed] = useState(false);
 
   if (errors.length === 0 || isClosed) {
-    return null; // or return <></>
+    return null;
   }
 
   return (

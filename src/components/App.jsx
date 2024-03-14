@@ -1,8 +1,7 @@
 import { Card, CardBody } from 'react-bootstrap';
 import FormSubmit from './formSubmit/FormSubmit';
 import Filter from './filter/Filter';
-// import { ToastContainer } from 'react-toastify';
-import React, { useEffect } from 'react'; // Asigură-te că importezi `useState` de la 'react'
+import React, { useEffect } from 'react';
 import ContactList from './contactList/ContactList';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from '../redux/contactService';
