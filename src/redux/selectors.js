@@ -11,9 +11,15 @@ export const selectFiltersContacts = state => state.contactsFilter.value;
 export const selectVisibleContacts = createSelector(
   [selectContacts, selectFiltersContacts],
   (contacts, filteredContacts) => {
-    const actualFilter = filteredContacts || '';
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(actualFilter.toLowerCase())
-    );
+    // Verificați dacă contacts este definit și nu este null
+    if (contacts && Array.isArray(contacts)) {
+      const actualFilter = filteredContacts || '';
+      return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(actualFilter.toLowerCase())
+      );
+    } else {
+      // În cazul în care contacts este undefined sau nu este un array valid, returnați un array gol sau o altă valoare implicită
+      return [];
+    }
   }
 );
