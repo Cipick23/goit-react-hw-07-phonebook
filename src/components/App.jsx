@@ -20,11 +20,11 @@ export const App = () => {
   return (
     <div
       style={{
-        height: '95vh',
+        height: '90vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 25,
+        fontSize: 15,
         color: '#37cc57',
       }}
     >
