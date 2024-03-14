@@ -20,19 +20,19 @@ export const App = () => {
   return (
     <div
       style={{
-        height: '100vh',
+        height: '95vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 40,
+        fontSize: 25,
         color: '#37cc57',
       }}
     >
       <Card>
-        <h1>Phonebook</h1>
+        <h2>Phonebook</h2>
         <CardBody>
           <FormSubmit />
-          <Card.Title>Contacts</Card.Title>
+          <h4>Contacts</h4>
           <Filter />
           {isLoading && !error && <ClipLoader />}
           <ContactList />

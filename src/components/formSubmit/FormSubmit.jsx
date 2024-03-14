@@ -33,7 +33,7 @@ const FormSubmit = () => {
           Name
         </FormLabel>
         <FormControl
-          className={css.contactForm__field}
+          className={css.filterInput}
           id="name"
           type="text"
           name="name"
@@ -48,7 +48,7 @@ const FormSubmit = () => {
           Number
         </FormLabel>
         <FormControl
-          className={css.contactForm__field}
+          className={css.filterInput}
           id="number"
           type="tel"
           name="number"
@@ -59,7 +59,7 @@ const FormSubmit = () => {
       </FormGroup>
 
       <FormGroup className={css.form}>
-        <Button className={css.contactForm__button} type="submit">
+        <Button className={css.formSubmitBtn} type="submit">
           Add Contact
         </Button>
       </FormGroup>
